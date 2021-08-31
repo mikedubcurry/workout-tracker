@@ -1,0 +1,32 @@
+version: '3.7'
+
+services:
+  workout-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: base
+    volumes:
+      - ./src:/home/app/src
+    container_name: workout-tracker
+    depends_on: 
+      - db
+    expose:
+      - '3000'
+    ports:
+      - '3000:3000'
+    command: npm run dev
+
+  db:
+    image: 'postgres'
+    ports:
+      - '5432:5432'
+    # volumes:
+    #   - app-db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: 'postgres'
+      POSTGRES_PASSWORD: 'postgres'
+      POSTGRES_DB: 'postgres'
+
+# volumes:
+#   app-db:
