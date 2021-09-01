@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 import { Muscles } from '../types';
+import { Workout } from './Workout';
 
 @Entity()
 export class Exercise {
@@ -18,6 +19,9 @@ export class Exercise {
 	@Column()
 	sets!: number;
 
-	@Column()
+	@Column({ nullable: true })
 	weight!: number;
+
+	@ManyToOne((type) => Workout, (workout) => workout.exercises)
+	workout!: Workout;
 }

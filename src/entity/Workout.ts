@@ -1,9 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToMany, JoinTable } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToMany, ManyToOne } from 'typeorm';
 import { Exercise } from './Exercise';
 import { Intensity } from '../types';
 
 @Entity()
-export class Workput {
+export class Workout {
 	@PrimaryGeneratedColumn()
 	id!: number;
 
@@ -13,7 +13,6 @@ export class Workput {
 	@Column()
 	intensity!: Intensity;
 
-	@ManyToMany((type) => Exercise)
-	@JoinTable()
+	@OneToMany((type) => Exercise, (exercise) => exercise.workout)
 	exercises!: Exercise[];
 }
