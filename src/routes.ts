@@ -5,7 +5,7 @@ import {
 	getWorkouts,
 	createWorkout,
 	createExercise,
-	// addExercisesToWorkout,
+	addExercisesToWorkout,
 } from './controllers';
 import { Route } from './types';
 
@@ -46,9 +46,9 @@ export const routes: Route[] = [
 		method: 'post',
 		action: createWorkout,
 	},
-	// {
-	// 	path: '/workouts/exercises',
-	// 	method: 'post',
-	// 	action: addExercisesToWorkout,
-	// },
+	{
+		path: '/workouts/exercises',
+		method: 'post',
+		action: addExercisesToWorkout,
+	},
 ];

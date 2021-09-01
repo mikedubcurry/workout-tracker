@@ -13,6 +13,6 @@ export class Workout {
 	@Column()
 	intensity!: Intensity;
 
-	@OneToMany((type) => Exercise, (exercise) => exercise.workout)
+	@OneToMany((type) => Exercise, (exercise) => exercise.workout, { cascade: true })
 	exercises!: Exercise[];
 }

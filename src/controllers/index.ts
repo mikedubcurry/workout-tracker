@@ -1,3 +1,3 @@
 export { getExerciseTypes, createExerciseType } from './exerciseTypes';
-export { getExercises, createExercise } from './exercise';
-export { getWorkouts, createWorkout,  } from './workout';
+export { getExercises, createExercise, addExercisesToWorkout } from './exercise';
+export { getWorkouts, createWorkout } from './workout';

@@ -3,6 +3,7 @@ import { ExerciseType } from '../entity/ExerciseType';
 import { Exercise } from '../entity/Exercise';
 
 import { Handler, Muscles } from '../types';
+import { Workout } from '../entity/Workout';
 
 export const getExercises: Handler = async (req, res) => {
 	const exerciseRepository = getManager().getRepository(Exercise);
@@ -48,5 +49,25 @@ export const addExercisesToWorkout: Handler = async (req, res) => {
 
 	if (!userInput || !userInput.workout || (!userInput.exercises && !userInput.exercises.length)) {
 		return res.status(400).json({ message: 'must supply workoutID and array of exercises' });
+	}
+
+	const exerciseRepository = getManager().getRepository(Exercise);
+	const exercises = await exerciseRepository.findByIds(userInput.exercises);
+	const workoutRepository = getManager().getRepository(Workout);
+	const workout = await workoutRepository.findOne(userInput.workout);
+	if (workout) {
+		exercises.forEach((ex) => {
+			ex.workout = workout;
+		});
+		workout.exercises = exercises;
+	} else {
+		return res.status(400).json({ message: 'workout does not exist' });
+	}
+	try {
+		await workoutRepository.save(workout);
+		// await exerciseRepository.save(exercises);
+		res.send(workout);
+	} catch (e) {
+		return res.status(500).json({ message: 'failed to save exercises to workout' });
 	}
 };
