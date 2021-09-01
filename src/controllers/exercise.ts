@@ -66,7 +66,9 @@ export const addExercisesToWorkout: Handler = async (req, res) => {
 	try {
 		await workoutRepository.save(workout);
 		// await exerciseRepository.save(exercises);
-		res.send(workout);
+		console.log(workout);
+
+		res.json({ id: workout.id });
 	} catch (e) {
 		return res.status(500).json({ message: 'failed to save exercises to workout' });
 	}
