@@ -28,6 +28,7 @@
 		border: none;
 		font-weight: bold;
 		transition: filter 0.3s ease;
+		cursor: pointer;
 	}
 
 	button:hover,
