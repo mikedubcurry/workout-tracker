@@ -28,7 +28,7 @@ export const createUser: Handler = async (req, res) => {
 		await userRepository.save(user);
 		const token = sign({ email: user.email, id: user.id }, process.env.jwt_secret!, { expiresIn: '1hr' });
 
-		res.send(token);
+		res.json({token});
 	} catch (e) {
 		res.status(500).json({ message: 'failed creating the user: ', e });
 	}
