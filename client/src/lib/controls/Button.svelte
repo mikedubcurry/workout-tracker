@@ -2,6 +2,7 @@
 	export let text: string;
 	export let action: (e: Event) => void;
 	export let btnType: 'primary' | 'secondary' | 'accent';
+	export let submit = false;
 
 	let style = '';
 	switch (btnType) {
@@ -13,13 +14,12 @@
 				'background-color: var(--secondary-color, #bcab79); color: var(--darker-color, #315659);';
 			break;
 		case 'accent':
-			style =
-				'background-color: var(--accent-color, #2978a0); color: var(--light-color, #253031);';
+			style = 'background-color: var(--accent-color, #2978a0); color: var(--light-color, #253031);';
 			break;
 	}
 </script>
 
-<button {style} on:click={action}>{text}</button>
+<button type={submit ? 'submit' : 'button'} {style} on:click={action}>{text}</button>
 
 <style>
 	button {
