@@ -3,27 +3,33 @@
 </script>
 
 <header>
-	<h1><a href="/">Gym Stats</a></h1>
-
+	<div class="title">
+		<h1><a href="/">Gym Stats</a></h1>
+		<p class="slogan">Track your workouts</p>
+	</div>
 	<AuthBtns />
 </header>
 
 <style>
 	header {
 		display: flex;
-		justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+		justify-content: space-around;
+		align-items: center;
 		background-color: var(--primary-color, #c6e0ff);
-    height: 10vh;
+		height: 15vh;
 	}
-  h1 {
-    margin-inline-start: 14px;
+  .title {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
   }
-  a {
-    text-decoration: none;
-    color: var(--darker-color, #253031)
-  }
-  a:hover, a:focus {
-    color: var(--dark-color)
-  }
+	a {
+		text-decoration: none;
+		color: var(--darker-color, #253031);
+	}
+	a:hover,
+	a:focus {
+		color: var(--dark-color);
+	}
 </style>
