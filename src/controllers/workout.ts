@@ -1,11 +1,22 @@
 import { getManager } from 'typeorm';
-import { Workout } from '../entity/Workout';
+import { decode, verify } from 'jsonwebtoken';
 
+import { User, Workout } from '../entity';
 import { Handler } from '../types';
 
 export const getWorkouts: Handler = async (req, res) => {
+	const { token } = req.body;
+	const decoded = verify(token, process.env.jwt_secret!) as User;
+
+	const userRepository = getManager().getRepository(User);
+	const user = await userRepository.findOne({ email: decoded.email });
+
+	if (!user) {
+		return res.status(401).json({ message: 'user not found' });
+	}
+
 	const workoutRepository = getManager().getRepository(Workout);
-	const workouts = await workoutRepository.find({relations: ['exercises']});
+	const workouts = await workoutRepository.find({ relations: ['exercises'], where: { user: { id: decoded.id } } });
 
 	return res.send(workouts);
 };
@@ -17,11 +28,23 @@ export const createWorkout: Handler = async (req, res) => {
 		return res.status(400).json({ message: 'must supply date and intensity to create a workout' });
 	}
 
+	const { token } = req.body;
+	const decoded = verify(token, process.env.jwt_secret!) as User;
+
+	console.log(decoded);
+
+	const userRepository = getManager().getRepository(User);
+	const user = await userRepository.findOne({ email: decoded.email });
+	if (!user) {
+		return res.status(401).json({ message: 'user not found' });
+	}
+
 	const workoutRepository = getManager().getRepository(Workout);
 	const workout = new Workout();
 	workout.date = userInput.date;
 	workout.intensity = userInput.intensity;
 	workout.exercises = [];
+	workout.user = user;
 
 	try {
 		await workoutRepository.save(workout);
