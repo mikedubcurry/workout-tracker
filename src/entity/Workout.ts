@@ -1,6 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToMany, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToMany, ManyToOne, OneToOne } from 'typeorm';
 import { Exercise } from './Exercise';
 import { Intensity } from '../types';
+import { User } from './';
 
 @Entity()
 export class Workout {

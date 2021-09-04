@@ -1,6 +1,6 @@
 import { getManager } from 'typeorm';
-import { ExerciseType } from '../entity/ExerciseType';
 
+import { ExerciseType } from '../entity';
 import { Handler, Muscles } from '../types';
 
 export const getExerciseTypes: Handler = async (req, res) => {
