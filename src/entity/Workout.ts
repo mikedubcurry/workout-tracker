@@ -16,4 +16,7 @@ export class Workout {
 
 	@OneToMany((type) => Exercise, (exercise) => exercise.workout, { cascade: true })
 	exercises!: Exercise[];
+
+	@ManyToOne((type) => User, user => user.workouts)
+	user!: User;
 }
