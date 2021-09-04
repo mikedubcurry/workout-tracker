@@ -50,4 +50,4 @@ export type Route = {
 	action: Handler
 };
 
-export type Handler = (req: Request, res: Response) => Promise<any>
+export type Handler = (req: Request, res: Response, next?: NextFunction) => Promise<any>

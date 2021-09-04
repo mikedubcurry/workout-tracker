@@ -2,8 +2,13 @@ import express from 'express';
 import cors from 'cors';
 import 'reflect-metadata';
 import { createConnection } from 'typeorm';
+import { config } from 'dotenv';
 
-import { routes } from './routes';
+import { protectedRoutes, routes } from './routes';
+import { Handler } from './types';
+import { verifyToken } from './controllers';
+
+config();
 
 const port = process.env.PORT || 3000;
 
@@ -30,6 +35,7 @@ createConnection()
 
 		// 	res.json({ exType });
 		// });
+		app.use('/api', verifyToken)
 		routes.forEach((route) => {
 			app[route.method](route.path, (req, res, next) => {
 				route
@@ -44,3 +50,5 @@ createConnection()
 		});
 	})
 	.catch((error) => console.log(error));
+
+

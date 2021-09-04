@@ -6,49 +6,69 @@ import {
 	createWorkout,
 	createExercise,
 	addExercisesToWorkout,
+	createUser,
+	login,
 } from './controllers';
 import { Route } from './types';
 
 export const routes: Route[] = [
+	// users
+	{
+		path: '/user/signup',
+		method: 'post',
+		action: createUser,
+	},
+
+	{
+		path: '/user/login',
+		method: 'post',
+		action: login,
+	},
+
 	// exerciseTypes
 	{
-		path: '/exerciseTypes',
+		path: '/api/exerciseTypes',
 		method: 'get',
 		action: getExerciseTypes,
 	},
 
 	{
-		path: '/exerciseTypes',
+		path: '/api/exerciseTypes',
 		method: 'post',
 		action: createExerciseType,
 	},
 
 	// exercises
 	{
-		path: '/exercises',
+		path: '/api/exercises',
 		method: 'get',
 		action: getExercises,
 	},
+
 	{
-		path: '/exercises',
+		path: '/api/exercises',
 		method: 'post',
 		action: createExercise,
 	},
 
 	// workouts
 	{
-		path: '/workouts',
+		path: '/api/workouts',
 		method: 'get',
 		action: getWorkouts,
 	},
+
 	{
-		path: '/workouts',
+		path: '/api/workouts',
 		method: 'post',
 		action: createWorkout,
 	},
+
 	{
-		path: '/workouts/exercises',
+		path: '/api/workouts/exercises',
 		method: 'post',
 		action: addExercisesToWorkout,
 	},
 ];
+
+export const protectedRoutes: Route[] = [];
