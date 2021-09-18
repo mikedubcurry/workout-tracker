@@ -5,7 +5,7 @@ import { User, Workout } from '../entity';
 import { Handler } from '../types';
 
 export const getWorkouts: Handler = async (req, res) => {
-	const { token } = req.body;
+	const { token } = req.cookies;
 	const decoded = verify(token, process.env.jwt_secret!) as User;
 
 	const userRepository = getManager().getRepository(User);
@@ -23,15 +23,14 @@ export const getWorkouts: Handler = async (req, res) => {
 
 export const createWorkout: Handler = async (req, res) => {
 	const userInput = req.body;
+	console.log('userInput', req.body);
 
 	if (!userInput || !userInput.date || !userInput.intensity) {
 		return res.status(400).json({ message: 'must supply date and intensity to create a workout' });
 	}
 
-	const { token } = req.body;
+	const { token } = req.cookies;
 	const decoded = verify(token, process.env.jwt_secret!) as User;
-
-	console.log(decoded);
 
 	const userRepository = getManager().getRepository(User);
 	const user = await userRepository.findOne({ email: decoded.email });
@@ -54,6 +53,21 @@ export const createWorkout: Handler = async (req, res) => {
 	}
 };
 
+export const deleteWorkout: Handler = async (req, res) => {
+	const userInput = req.body;
+
+	if (!userInput || !userInput.workoutId) {
+		return res.status(400).json({ message: 'must supply workoutId' });
+	}
+
+	const workoutRepository = getManager().getRepository(Workout);
+	try {
+		let deleted = await workoutRepository.delete({ id: userInput.workoutId });
+		return res.status(200).json({ message: 'success' });
+	} catch (e) {
+		return res.status(500).json({ message: 'failed to delete workout' });
+	}
+};
 // export const addExercisesToWorkout: Handler = async (req, res) => {
 // 	const userInput = req.body;
 // 	if (!userInput || !userInput.workout || (!userInput.exercises && !userInput.exercises.length)) {

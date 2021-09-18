@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import 'reflect-metadata';
 import { createConnection } from 'typeorm';
+import  cookieParser from 'cookie-parser'
 import { config } from 'dotenv';
 
 import { protectedRoutes, routes } from './routes';
@@ -16,6 +17,7 @@ createConnection()
 	.then(async (connection) => {
 		const app = express();
 		app.use(cors());
+		app.use(cookieParser())
 		app.use(express.json());
 		// await connection.dropDatabase()
 		// app.get('/', async (req, res) => {

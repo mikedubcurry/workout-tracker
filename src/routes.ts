@@ -1,13 +1,14 @@
 import {
 	getExerciseTypes,
 	createExerciseType,
-	getExercises,
+	getUniqueExercises,
 	getWorkouts,
 	createWorkout,
 	createExercise,
 	addExercisesToWorkout,
 	createUser,
 	login,
+	deleteWorkout,
 } from './controllers';
 import { Route } from './types';
 
@@ -42,7 +43,7 @@ export const routes: Route[] = [
 	{
 		path: '/api/exercises',
 		method: 'get',
-		action: getExercises,
+		action: getUniqueExercises,
 	},
 
 	{
@@ -62,6 +63,12 @@ export const routes: Route[] = [
 		path: '/api/workouts',
 		method: 'post',
 		action: createWorkout,
+	},
+
+	{
+		path: '/api/workouts',
+		method: 'delete',
+		action: deleteWorkout,
 	},
 
 	{
