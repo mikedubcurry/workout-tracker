@@ -2,12 +2,12 @@ import { verify } from 'jsonwebtoken';
 import { Handler } from '../types';
 
 export { getExerciseTypes, createExerciseType } from './exerciseTypes';
-export { getExercises, createExercise, addExercisesToWorkout } from './exercise';
-export { getWorkouts, createWorkout } from './workout';
+export { getUniqueExercises, createExercise, addExercisesToWorkout } from './exercise';
+export { getWorkouts, createWorkout, deleteWorkout } from './workout';
 export { createUser, login } from './user';
 
 export const verifyToken: Handler = async (req, res, next) => {
-	const { token } = req.body;
+	const { token } = req.cookies;
 
 	if (!token) {
 		return res.status(401).json({ message: 'must include valid token for this request' });
@@ -19,6 +19,6 @@ export const verifyToken: Handler = async (req, res, next) => {
 			next && next();
 		}
 	} catch (err) {
-		return res.status(401).json({ message: 'must include a valid token for this request' });
+		return res.status(401).json({ message: 'unauthorized' });
 	}
 };

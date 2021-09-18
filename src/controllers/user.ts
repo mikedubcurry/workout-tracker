@@ -26,7 +26,7 @@ export const createUser: Handler = async (req, res) => {
 
 	try {
 		await userRepository.save(user);
-		const token = sign({ email: user.email, id: user.id }, process.env.jwt_secret!, { expiresIn: '1hr' });
+		const token = tokenForUser(user);
 
 		res.json({ token });
 	} catch (e) {
@@ -54,7 +54,11 @@ export const login: Handler = async (req, res) => {
 		return res.status(401).json({ message: 'incorrect email or password' });
 	}
 
-	const token = sign({ email: user.email, id: user.id }, process.env.jwt_secret!, { expiresIn: '1hr' });
+	const token = tokenForUser(user);
 
-	res.send(token);
+	res.json({ token });
 };
+
+export function tokenForUser(user: User) {
+	return sign({ email: user.email, id: user.id }, process.env.jwt_secret!, { expiresIn: '1hr' });
+}

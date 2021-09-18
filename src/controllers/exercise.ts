@@ -3,24 +3,22 @@ import { getManager } from 'typeorm';
 import { Exercise, Workout } from '../entity';
 import { Handler, Muscles } from '../types';
 
-export const getExercises: Handler = async (req, res) => {
+export const getUniqueExercises: Handler = async (req, res) => {
 	const exerciseRepository = getManager().getRepository(Exercise);
 
-	const exercises = await exerciseRepository.find({ relations: ['workout'] });
-
-	res.send(exercises);
+	const exercises = await exerciseRepository.find({select: ['name', 'muscleGroup', 'id']});
+	const unique = exercises.reduce((unq, ex) => {
+		if (!unq.some((i) => i.name === ex.name)) {
+			unq.push(ex);
+		}
+		return unq;
+	}, [] as Exercise[]);
+	res.send(unique);
 };
 
 export const createExercise: Handler = async (req, res) => {
 	const userInput = req.body;
-	if (
-		!userInput ||
-		!userInput.name ||
-		!userInput.muscleGroup ||
-		!userInput.reps ||
-		!userInput.sets
-		// !userInput.weight
-	) {
+	if (!userInput || !userInput.name || !userInput.muscleGroup || !userInput.reps || !userInput.sets) {
 		return res
 			.status(400)
 			.json({ message: 'must include name, muscleGroup, reps, sets, and weight to create a new Exercise' });
@@ -63,7 +61,6 @@ export const addExercisesToWorkout: Handler = async (req, res) => {
 	}
 	try {
 		await workoutRepository.save(workout);
-		// await exerciseRepository.save(exercises);
 		console.log(workout);
 
 		res.json({ id: workout.id });
