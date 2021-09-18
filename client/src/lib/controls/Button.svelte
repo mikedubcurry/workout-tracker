@@ -1,6 +1,6 @@
 <script lang="ts">
 	export let text: string;
-	export let action: (e: Event) => void;
+	export let action: (e: Event) => void = () => {};
 	export let btnType: 'primary' | 'secondary' | 'accent';
 	export let submit = false;
 

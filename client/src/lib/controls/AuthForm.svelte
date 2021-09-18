@@ -1,9 +1,10 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher, onMount } from 'svelte';
 	import { fade, fly } from 'svelte/transition';
 
 	import { portal } from '$lib/actions/portal';
 	import Button from './Button.svelte';
+	import Dialog from '../Dialog.svelte';
 	import { enhance } from '$lib/actions/form';
 
 	export let type: 'Log In' | 'Sign Up';
@@ -13,17 +14,26 @@
 	let email = '';
 	let password = '';
 
-	let action = type === 'Log In' ? '/auth/login' : '/auth/signup';
+	let action = type === 'Log In' ? '/login' : '/signup';
+
+	let input: HTMLInputElement;
+
+	onMount(() => {
+		input.focus();
+	});
 </script>
 
+<Dialog on:dialogClose={() => dispatch('formClose')}>
 <form
-	use:portal
 	use:enhance={{
 		result: async (res, form) => {
-			console.log(await res.json());
 			form.reset();
+			dispatch('formSubmit');
+			window.location.reload();
 		},
-		pending: (data, form) => {},
+		pending: (data, form) => {
+			// TODO: add pending state
+		},
 		error: async (res, err, form) => {
 			if (err) {
 				console.error(err);
@@ -31,6 +41,7 @@
 				console.error(await res.json());
 			}
 			form.reset();
+			input.focus();
 		}
 	}}
 	{action}
@@ -39,7 +50,7 @@
 >
 	<label for="email"
 		><span>Email:</span>
-		<input type="text" name="email" id="email" required bind:value={email} />
+		<input bind:this={input} type="text" name="email" id="email" required bind:value={email} />
 	</label>
 	<label for="password"
 		><span>Password:</span><input
@@ -50,16 +61,7 @@
 			bind:value={password}
 		/></label
 	>
-	<!-- <input type="submit" /> -->
-	<Button
-		btnType={type === 'Log In' ? 'secondary' : 'accent'}
-		text={type}
-		action={(e) => {
-			// e.preventDefault();
-			// dispatch('formSubmit');
-		}}
-		submit={true}
-	/>
+	<Button btnType={type === 'Log In' ? 'secondary' : 'accent'} text={type} submit={true} />
 	<Button
 		btnType="secondary"
 		text="Close"
@@ -69,13 +71,14 @@
 		}}
 	/>
 </form>
-<div
+</Dialog>
+<!-- <div
 	on:click={() => {
 		dispatch('formClose');
 	}}
 	transition:fade
 	class="bgOverlay"
-/>
+/> -->
 
 <style>
 	form {

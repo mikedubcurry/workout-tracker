@@ -1,47 +1,59 @@
+<script lang="ts" context="module">
+	export const load = ({ session }) => {
+		console.log(session);
+		return { status: 200 };
+	};
+</script>
+
 <script lang="ts">
+	import { session } from '$app/stores';
 	import AuthForm from './controls/AuthForm.svelte';
 	import Button from './controls/Button.svelte';
 
-	let loggedIn = false;
+	let loggedIn = $session.user ? true : false;
 	let showAuthForm = false;
 	let btn: 'Log In' | 'Sign Up';
-	// TODO: implement Auth flow
-</script>
+</script>	
 
 <div class="authBtns">
 	{#if showAuthForm}
 		<AuthForm
 			on:formSubmit={() => {
 				showAuthForm = false;
-				loggedIn = true;
 			}}
 			on:formClose={() => {
 				showAuthForm = false;
 			}}
 			type={btn}
 		/>
-	{:else if loggedIn}
-		<Button btnType="secondary" text="Log Out" action={() => (loggedIn = false)}>Log Out</Button>
+	{/if}
+	{#if loggedIn}
+		<Button
+			btnType="secondary"
+			text="Log Out"
+			action={async () => {
+				const response = await fetch('/logout', { method: 'post' });
+				showAuthForm = false;
+				window.location.reload()
+			}}
+		/>
 	{:else}
 		<Button
 			btnType="accent"
 			text="Sign Up"
 			action={() => {
-				// loggedIn = true;
 				btn = 'Sign Up';
 				showAuthForm = true;
-			}}>Sign Up</Button
-		>
+			}}
+		/>
 		<Button
 			btnType="secondary"
 			text="Log In"
 			action={() => {
-				// login();
-				// loggedIn = true;
 				btn = 'Log In';
 				showAuthForm = true;
-			}}>Log In</Button
-		>
+			}}
+		/>
 	{/if}
 </div>
 
